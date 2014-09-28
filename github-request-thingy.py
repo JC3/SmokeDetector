@@ -35,7 +35,7 @@ class GithubHookHandler(BaseHTTPRequestHandler):
         subprocess.call(['sh', 'deploy_git.sh'])
         payload = {'state': 'success'}
         deploy_id = payload["id"]
-        r = requests.post("https://api.github.com/repos/Charcoal-SE/SmokeDetector/deployments/:id/statuses", data=payload, headers={'Accept': 'application/vnd.github.cannonball-preview+json'})
+        r = requests.post("https://api.github.com/repos/Charcoal-SE/SmokeDetector/deployments/" + deploy_id + "/statuses", data=payload, headers={'Accept': 'application/vnd.github.cannonball-preview+json'})
  
 class MyHandler(GithubHookHandler):
     def handle_payload(self, json_payload):
@@ -44,5 +44,6 @@ class MyHandler(GithubHookHandler):
         pprint.pprint(json_payload)
  
 if __name__ == '__main__':
-    server = HTTPServer(('', 8081), MyHandler)
+    server = HTTPServer(('', 8080), MyHandler)
+    print("got to here")
     server.serve_forever()
