@@ -1,6 +1,6 @@
 git pull origin master
 autostartscript="nocrash.sh"
-startPID=pgrep $autostartscript
+startPID=pgrep -f $autostartscript
 pkill -P $startPID
-pkill $autostartscript
+pkill -f $autostartscript
 python $autostartscript
