@@ -27,6 +27,7 @@ blockedTime = 0
 charcoal_room_id = "11540"
 meta_tavern_room_id = "89"
 privileged_users = { charcoal_room_id: ["66258", "31768","103081","73046","88521","59776"], meta_tavern_room_id: ["178438","237685","215468","229438","180276", "161974", "244382", "186281"] }
+smokeDetector_user_id = { charcoal_room_id: "120914", meta_tavern_room_id: "266345" }
 
 wrap=Client("stackexchange.com")
 wrap.login(username,password)
@@ -119,10 +120,12 @@ def watcher(ev,wrap2):
         msg_id = int(message_parts[0][1:])
         if(ev_room == charcoal_room_id):
           msg_to_delete = wrap.get_message(msg_id)
-          msg_to_delete.delete()
+          if(str(msg_to_delete.owner.id) == smokeDetector_user_id[charcoal_room_id]):
+            msg_to_delete.delete()
         elif(ev_room == meta_tavern_room_id):
           msg_to_delete = wrapm.get_message(msg_id)
-          msg_to_delete.delete()
+          if(str(msg_to_delete.owner.id) == smokeDetector_user_id[meta_tavern_room_id]):
+            msg_to_delete.delete()
       except:
         pass # couldn't delete message
   if(ev.content.startswith("!!/alive?")):
@@ -131,7 +134,7 @@ def watcher(ev,wrap2):
     elif(ev_room == meta_tavern_room_id):
       roomm.send_message(':'+str(ev.data["message_id"]) + ' ' + random.choice(['Yup', 'You doubt me?', 'Of course', '... did I miss something?', 'plz send teh coffee', 'watching this endless list of new questions *never* gets boring', 'kinda sorta']))
   if(ev.content.startswith("!!/rev?")):
-    room.send_message(':'+str(ev.data["message_id"])+' '+os.popen("git log --pretty=format:'%h' -n 1").read())
+      postMessageInRoom(ev_room, ':'+str(ev.data["message_id"])+' '+os.popen("git log --pretty=format:'%h' -n 1").read())
   if(ev.content.startswith("!!/reboot")):
     if(isPrivileged(ev_room, ev_user_id)):
       postMessageInRoom(ev_room, "Goodbye, cruel world")
