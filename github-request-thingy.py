@@ -44,5 +44,5 @@ class MyHandler(GithubHookHandler):
         pprint.pprint(json_payload)
  
 if __name__ == '__main__':
-    server = HTTPServer(('', 8080), MyHandler)
+    server = HTTPServer(('', 8081), MyHandler)
     server.serve_forever()
