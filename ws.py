@@ -32,13 +32,13 @@ filter_auto_ignored_posts()
 
 GlobalVars.bodyfetcher=BodyFetcher()
 GlobalVars.wrap.login(username, password)
-#GlobalVars.wrapm.login(username, password)
+GlobalVars.wrapm.login(username, password)
 GlobalVars.s = "[ [SmokeDetector](https://github.com/Charcoal-SE/SmokeDetector) ] SmokeDetector started at [rev " + GlobalVars.commit_with_author + "](https://github.com/Charcoal-SE/SmokeDetector/commit/"+ GlobalVars.commit +") (hosted by Undo)"
 GlobalVars.s_reverted = "[ [SmokeDetector](https://github.com/Charcoal-SE/SmokeDetector) ] SmokeDetector started in [reverted mode](https://github.com/Charcoal-SE/SmokeDetector/blob/master/RevertedMode.md) at [rev " + GlobalVars.commit_with_author + "](https://github.com/Charcoal-SE/SmokeDetector/commit/"+ GlobalVars.commit +") (hosted by Undo)"
 GlobalVars.charcoal_hq = GlobalVars.wrap.get_room(GlobalVars.charcoal_room_id)
-#GlobalVars.tavern_on_the_meta = GlobalVars.wrapm.get_room(GlobalVars.meta_tavern_room_id)
+GlobalVars.tavern_on_the_meta = GlobalVars.wrapm.get_room(GlobalVars.meta_tavern_room_id)
 
-GlobalVars.specialrooms = [{ "sites": ["english.stackexchange.com"], "room": GlobalVars.wrap.get_room("95"), "unwantedReasons": [] }, { "sites": ["askubuntu.com"], "room": GlobalVars.wrap.get_room("201"), "unwantedReasons": ["All-caps title", "Phone number detected"] }]
+GlobalVars.specialrooms = [{ "sites": ["english.stackexchange.com"], "room": GlobalVars.wrap.get_room("95"), "unwantedReasons": [], "showExperimental": False }, { "sites": ["askubuntu.com"], "room": GlobalVars.wrap.get_room("201"), "unwantedReasons": ["All-caps title", "Phone number detected"], "showExperimental": False }]#, { "sites": [], "room": GlobalVars.tavern_on_the_meta, "unwantedReasons": [], "showExperimental": False}]
 
 GlobalVars.bayesian_testroom = GlobalVars.wrap.get_room("17251")
 if "first_start" in sys.argv and GlobalVars.on_master:
@@ -57,13 +57,21 @@ threading.Thread(target=restart_automatically,args=(3600,)).start()
 
 threading.Thread(target=watchCi,args=()).start()
 
+print "boo"
+
 ws = websocket.create_connection("ws://qa.sockets.stackexchange.com/")
 ws.send("155-questions-active")
 GlobalVars.charcoal_hq.join()
-#GlobalVars.tavern_on_the_meta.join()
 
+print "yay"
+
+GlobalVars.tavern_on_the_meta.join()
 GlobalVars.charcoal_hq.watch_socket(watcher)
-#GlobalVars.tavern_on_the_meta.watch_socket(watcher)
+print "meh"
+GlobalVars.tavern_on_the_meta.watch_socket(watcher)
+
+print "oy"
+
 while True:
     try:
         a = ws.recv()
